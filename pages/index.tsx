@@ -4,10 +4,6 @@ import styles from '../styles/Home.module.css';
 import { WidgetProps } from "@worldcoin/id";
 import dynamic from "next/dynamic";
 
-const WorldIDWidget = dynamic<WidgetProps>(
-  () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
-  { ssr: false }
-);
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -20,15 +16,8 @@ const Home: NextPage = () => {
 
        
 
-        {/* <p className={styles.description}>
-        <WorldIDWidget
-  actionId="wid_BPZsRJANxct2cZxVRyh80SFG" // obtain this from developer.worldcoin.org
-  signal="my_signal"
-  enableTelemetry
-  onSuccess={(verificationResponse) => console.log(verificationResponse)}
-  onError={(error) => console.error(error)}
-/>;
-        </p> */}
+        <p className={styles.description}>
+        </p>
 
         <div className={styles.grid}>
           

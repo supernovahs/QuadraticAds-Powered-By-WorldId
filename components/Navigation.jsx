@@ -1,7 +1,10 @@
 import React from "react";
 import Link from "next/link";
 export default function Navigation() {
-  const menu = [{ tabName: "Ads", pageName: "/" }];
+  const menu = [
+    { tabName: "Ads", pageName: "/" },
+    { tabName: "Fund", pageName: "/Fund" },
+  ];
 
   return (
     <>
