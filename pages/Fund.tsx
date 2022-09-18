@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import abi from "../contracts/src/helpers/Contract.json";
+import abi from "../src/helpers/Contract.json";
 import { Input, Button } from "@chakra-ui/react";
 import { useContract, useSigner } from "wagmi";
 import { WidgetProps } from "@worldcoin/id";

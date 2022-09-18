@@ -89,7 +89,7 @@ contract Contract {
             groupId,
             abi.encodePacked(signal).hashToField(),
             _nullifierHash,
-            abi.encodePacked('wid_staging_c281398b476d06d1426bb2242c05a073').hashToField(),
+            abi.encodePacked("wid_staging_c281398b476d06d1426bb2242c05a073").hashToField(),
             proof
         );
         
