@@ -61,7 +61,7 @@ const Home: NextPage = () => {
       const data = ad.map((e, idx) => {
         return {
           url: `https://ipfs.io/ipfs/${e.hash}`,
-          votes: parseInt(Votes[idx]),
+          votes: parseInt(sampleVotes[idx]),
         };
       });
 

@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  Tag,
   useDisclosure,
 } from "@chakra-ui/react";
 import { WorldIDWidget } from "@worldcoin/id";
@@ -34,7 +35,7 @@ const Card = ({ image }) => {
   }
 
   return (
-    <Box w={"100%"} h={"100%"}>
+    <Box w={"100%"} h={"100%"} position={"relative"}>
       <Image
         w={"100%"}
         h={"100%"}
@@ -43,7 +44,18 @@ const Card = ({ image }) => {
         objectFit={"cover"}
         onClick={onOpen}
       />
-
+      <Tag
+        size="md"
+        colorScheme="blackAlpha"
+        position="absolute"
+        top="0"
+        left="0"
+        m="2"
+        zIndex={100}
+        color={"whiteAlpha.900"}
+      >
+        Votes: {image.votes}
+      </Tag>
       <Modal size={"2xl"} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent pt={10} px={10}>
