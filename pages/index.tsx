@@ -10,14 +10,7 @@ import abi from "../src/helpers/Contract.json";
 import { useEffect, useState } from "react";
 const ethers = require("ethers");
 
-const sample = [
-  "https://bit.ly/naruto-sage",
-  "https://bit.ly/naruto-sage",
-  "https://bit.ly/naruto-sage",
-  "https://bit.ly/naruto-sage",
-  "https://bit.ly/naruto-sage",
-  "https://bit.ly/naruto-sage",
-];
+const sample = new Array(6).fill(null);
 
 const Home: NextPage = () => {
   const { data: signer, isError, isLoading } = useSigner();

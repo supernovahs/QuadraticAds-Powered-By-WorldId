@@ -1,5 +1,6 @@
 import { AspectRatio, Box, Image } from "@chakra-ui/react";
 import React from "react";
+import Card from "./Card";
 
 const Billboard = ({ images }) => {
   return (
@@ -10,63 +11,27 @@ const Billboard = ({ images }) => {
       h={"100%"}
       w={"100%"}
     >
-      <Box bg={"blue.100"} w={"50%"} h={"100%"} m={0}>
-        <Image
-          w={"100%"}
-          h={"100%"}
-          src={images[0].url}
-          alt={"image"}
-          objectFit={"cover"}
-        />
+      <Box bg={"blackAlpha.400"} w={"50%"} h={"100%"} m={0}>
+        <Card image={images[0]} />
       </Box>
       <Box display={"flex"} flexDir={"column"} w={"50%"} h={"100%"}>
-        <Box bg={"blue.200"} w={"100%"} h={"50%"}>
-          <Image
-            w={"100%"}
-            h={"100%"}
-            src={images[1].url}
-            alt={"image"}
-            objectFit={"cover"}
-          />
+        <Box bg={"blackAlpha.800"} w={"100%"} h={"50%"}>
+          <Card image={images[1]} />
         </Box>
         <Box display={"flex"} flexDir={"row-reverse"} w={"100%"} h={"50%"}>
-          <Box bg={"blue.300"} w={"50%"} h={"100%"}>
-            <Image
-              w={"100%"}
-              h={"100%"}
-              src={images[2].url}
-              alt={"image"}
-              objectFit={"cover"}
-            />
+          <Box bg={"blackAlpha.300"} w={"50%"} h={"100%"}>
+            <Card image={images[2]} />
           </Box>
           <Box display={"flex"} flexDir={"column-reverse"} w={"50%"} h={"100%"}>
-            <Box bg={"blue.400"} w={"100%"} h={"50%"}>
-              <Image
-                w={"100%"}
-                h={"100%"}
-                src={images[3].url}
-                alt={"image"}
-                objectFit={"cover"}
-              />
+            <Box bg={"blackAlpha.900"} w={"100%"} h={"50%"}>
+              <Card image={images[3]} />
             </Box>
             <Box display={"flex"} flexDir={"row"} w={"100%"} h={"50%"}>
-              <Box bg={"blue.500"} w={"50%"} h={"100%"}>
-                <Image
-                  w={"100%"}
-                  h={"100%"}
-                  src={images[4].url}
-                  alt={"image"}
-                  objectFit={"cover"}
-                />
+              <Box bg={"blackAlpha.500"} w={"50%"} h={"100%"}>
+                <Card image={images[4]} />
               </Box>
-              <Box bg={"blue.600"} w={"50%"} h={"100%"}>
-                <Image
-                  w={"100%"}
-                  h={"100%"}
-                  src={images[5].url}
-                  alt={"image"}
-                  objectFit={"cover"}
-                />
+              <Box bg={"blackAlpha.600"} w={"50%"} h={"100%"}>
+                <Card image={images[5]} />
               </Box>
             </Box>
           </Box>
