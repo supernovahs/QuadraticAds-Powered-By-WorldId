@@ -14,7 +14,7 @@ const Billboard = ({ images }) => {
         <Image
           w={"100%"}
           h={"100%"}
-          src={images[0]}
+          src={images[0].url}
           alt={"image"}
           objectFit={"cover"}
         />
@@ -24,7 +24,7 @@ const Billboard = ({ images }) => {
           <Image
             w={"100%"}
             h={"100%"}
-            src={images[1]}
+            src={images[1].url}
             alt={"image"}
             objectFit={"cover"}
           />
@@ -34,7 +34,7 @@ const Billboard = ({ images }) => {
             <Image
               w={"100%"}
               h={"100%"}
-              src={images[2]}
+              src={images[2].url}
               alt={"image"}
               objectFit={"cover"}
             />
@@ -44,7 +44,7 @@ const Billboard = ({ images }) => {
               <Image
                 w={"100%"}
                 h={"100%"}
-                src={images[3]}
+                src={images[3].url}
                 alt={"image"}
                 objectFit={"cover"}
               />
@@ -54,7 +54,7 @@ const Billboard = ({ images }) => {
                 <Image
                   w={"100%"}
                   h={"100%"}
-                  src={images[4]}
+                  src={images[4].url}
                   alt={"image"}
                   objectFit={"cover"}
                 />
@@ -63,7 +63,7 @@ const Billboard = ({ images }) => {
                 <Image
                   w={"100%"}
                   h={"100%"}
-                  src={images[5]}
+                  src={images[5].url}
                   alt={"image"}
                   objectFit={"cover"}
                 />

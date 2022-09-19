@@ -7,10 +7,10 @@ import Billboard from "../components/Billboard";
 import { Box } from "@chakra-ui/react";
 import { useContract, useSigner } from "wagmi";
 import abi from "../src/helpers/Contract.json";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 const ethers = require("ethers");
 
-const images = [
+const sample = [
   "https://bit.ly/naruto-sage",
   "https://bit.ly/naruto-sage",
   "https://bit.ly/naruto-sage",
@@ -21,36 +21,41 @@ const images = [
 
 const Home: NextPage = () => {
   const { data: signer, isError, isLoading } = useSigner();
-  const [Ads,SetAds] = useState();
-  const [Votes,SetVotes] = useState([]);
-  const provider = new ethers.providers.JsonRpcProvider("https://polygon-mumbai.g.alchemy.com/v2/jrGhfalUVcb1nws18jgVaZsI9EIoi7uE");
+  const [Ads, SetAds] = useState();
+  const [images, setImages] = useState(sample);
+  const [Votes, SetVotes] = useState([]);
+  const provider = new ethers.providers.JsonRpcProvider(
+    "https://polygon-mumbai.g.alchemy.com/v2/jrGhfalUVcb1nws18jgVaZsI9EIoi7uE"
+  );
   const contract = useContract({
     addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     contractInterface: abi.abi,
     signerOrProvider: provider,
   });
-  console.log("Contract",contract);
+  console.log("Contract", contract);
 
-  const getBillBoard = async () =>{
+  const getBillBoard = async () => {
     const Hashes = await contract.queryFilter(contract.filters.NewAd());
-    const check = await contract.Adhash("bafybeihl2az4oww6raqdcgiipoythpkcgu4daut3gxyyancgp6srq2e3di/solana.png");
-    console.log("Check",check);
+    const check = await contract.Adhash(
+      "bafybeihl2az4oww6raqdcgiipoythpkcgu4daut3gxyyancgp6srq2e3di/solana.png"
+    );
+    console.log("Check", check);
     // const iface = new ethers.utils.Interface(abi.abi);
-    
-   return (Hashes.map((e)=>{
-    console.log( typeof e.args[0].hash,"type");
-      return {
-        hash:e.args[0]
-      }
-   }))
-  }
 
-  useEffect(()=>{
-    const call = async ()=>{
+    return Hashes.map((e) => {
+      console.log(typeof e.args[0].hash, "type");
+      return {
+        hash: e.args[0],
+      };
+    });
+  };
+
+  useEffect(() => {
+    const call = async () => {
       let votes = [];
       const ad = await getBillBoard();
-      console.log("ad",ad);
-      for(let i=0; i<ad.length;i++){
+      console.log("ad", ad);
+      for (let i = 0; i < ad.length; i++) {
         let val = await contract.weightage(ad[i]);
         const decodedval = ethers.BigNumber.from(val).toString();
         votes.push(decodedval);
@@ -58,12 +63,25 @@ const Home: NextPage = () => {
       /// Votes array is in order of the Ads arrray . ie Ads[0] 's vote == Votes[0]
       SetVotes(votes);
       SetAds(ad);
-      console.log("ad",ad);
-      console.log("votes",votes);
-    }
-    call();
-  },[])
+      const sampleVotes = ["2", "5", "1", "6", "3", "4"];
+      SetVotes(sampleVotes);
+      const data = ad.map((e, idx) => {
+        return {
+          url: `https://ipfs.io/ipfs/${e.hash}`,
+          votes: parseInt(Votes[idx]),
+        };
+      });
 
+      data.sort((a, b) => {
+        return b.votes - a.votes;
+      });
+      setImages(data);
+      console.log("images", images);
+      console.log("ad", ad);
+      console.log("votes", votes);
+    };
+    call();
+  }, []);
 
   return (
     <div>
