@@ -26,7 +26,6 @@ export const Fund = React.memo( function Fund() {
     contractInterface: abi.abi,
     signerOrProvider: signer,
   });
-  console.log("Hash",Hash);
 
   console.log("Contract", contract);
 

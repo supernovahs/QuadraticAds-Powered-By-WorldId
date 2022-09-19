@@ -31,15 +31,17 @@ const Home: NextPage = () => {
   });
   console.log("Contract",contract);
 
-
   const getBillBoard = async () =>{
     const Hashes = await contract.queryFilter(contract.filters.NewAd());
-
+    const check = await contract.Adhash("bafybeihl2az4oww6raqdcgiipoythpkcgu4daut3gxyyancgp6srq2e3di/solana.png");
+    console.log("Check",check);
+    // const iface = new ethers.utils.Interface(abi.abi);
+    
    return (Hashes.map((e)=>{
+    console.log( typeof e.args[0].hash,"type");
       return {
-        hash: e.args[0].hash
+        hash:e.args[0]
       }
-
    }))
   }
 
@@ -55,7 +57,6 @@ const Home: NextPage = () => {
       }
       /// Votes array is in order of the Ads arrray . ie Ads[0] 's vote == Votes[0]
       SetVotes(votes);
-
       SetAds(ad);
       console.log("ad",ad);
       console.log("votes",votes);
