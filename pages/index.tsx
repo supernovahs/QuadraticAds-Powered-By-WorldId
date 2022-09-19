@@ -8,6 +8,7 @@ import { Box } from "@chakra-ui/react";
 import { useContract, useSigner } from "wagmi";
 import abi from "../src/helpers/Contract.json";
 import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
 const ethers = require("ethers");
 
 const sample = new Array(6).fill(null);
@@ -15,7 +16,7 @@ const sample = new Array(6).fill(null);
 const Home: NextPage = () => {
   const { data: signer, isError, isLoading } = useSigner();
   const [Ads, SetAds] = useState();
-  const [images, setImages] = useState(sample);
+  const [images, setImages] = useState(null);
   const [Votes, SetVotes] = useState([]);
   const provider = new ethers.providers.JsonRpcProvider(
     "https://polygon-mumbai.g.alchemy.com/v2/jrGhfalUVcb1nws18jgVaZsI9EIoi7uE"
@@ -82,7 +83,8 @@ const Home: NextPage = () => {
 
       <main>
         <Box h={"90vh"} w={"100vw"}>
-          <Billboard images={images} />
+          {images ? <Billboard images={images} /> : <Loader />}
+          {/* <Billboard images={images} /> */}
         </Box>
       </main>
     </div>
