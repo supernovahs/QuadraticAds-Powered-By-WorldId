@@ -14,12 +14,31 @@ import {
   Tag,
   useDisclosure,
 } from "@chakra-ui/react";
-import { WorldIDWidget } from "@worldcoin/id";
-import React from "react";
+import abi from "../src/helpers/Contract.json";
+import React, { useEffect, useState } from "react";
+import { useContract, useSigner } from "wagmi";
+import type { VerificationResponse } from "@worldcoin/id/dist/types";
+import dynamic from "next/dynamic";
+const {ethers} = require("ethers");
+
+const WorldIDWidget =
+  dynamic <
+  WidgetProps >
+  (() => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
+  { ssr: false });
 
 const Card = ({ image }) => {
+  const [Proof,SetProof] = useState<VerificationResponse |null>();
+  const { data: signer, isError, isLoading } = useSigner();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const contract = useContract({
+    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    contractInterface: abi.abi,
+    signerOrProvider: signer,
+  });
+
   console.log(image);
+
   if (!image) {
     return (
       <Box
@@ -74,7 +93,15 @@ const Card = ({ image }) => {
           </ModalBody>
           <ModalFooter py={5}>
             <Box display={"flex"} flexDirection={"column"} width={"100%"}>
-              <WorldIDWidget />
+              <WorldIDWidget
+                actionId="wid_staging_c281398b476d06d1426bb2242c05a073" // obtain this from developer.worldcoin.org
+                signal={image.hash}
+                enableTelemetry
+                onSuccess={(verificationResponse) =>
+                  SetProof(verificationResponse)
+                }
+                onError={(error) => console.error(error)}
+              />
 
               <Box
                 display={"flex"}
@@ -84,8 +111,26 @@ const Card = ({ image }) => {
                 w={"100%"}
                 mt={5}
               >
-                <Input w={"60%"} />
-                <Button w={"30%"} colorScheme={"blue"}>
+                
+                <Button w={"30%"} colorScheme={"blue"}
+                
+                onClick={(async()=>{
+
+                  // const cost = await contract.Cost(image.hash,Proof?.nullifier_hash);
+                  // console.log("cost",cost);
+                  console.log("image hash",image.hash);
+                  const a = await contract.weightage(image.hash);
+                  console.log("a",a);
+                  // await contract.Fund(
+                  //   image.hash,
+                  //   image.hash,
+                  //   Proof.merkle_root,
+                  //   Proof.nullifier_hash,
+                  //   ethers.utils.defaultAbiCoder.decode(["uint256[8]"], Proof.proof)[0],
+                  //   { gasLimit: 10000000,value:ethers.BigNumber.from(cost).toString()}
+                  //   )
+                })}
+                >
                   Fund
                 </Button>
               </Box>

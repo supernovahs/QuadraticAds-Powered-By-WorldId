@@ -49,22 +49,28 @@ const Home: NextPage = () => {
       let votes = [];
       const ad = await getBillBoard();
       console.log("ad", ad);
+
       for (let i = 0; i < ad.length; i++) {
+        console.log("ad hash",ad[i]);
         let val = await contract.weightage(ad[i]);
+        console.log("val in bignumber",val);
         const decodedval = ethers.BigNumber.from(val).toString();
         votes.push(decodedval);
       }
       /// Votes array is in order of the Ads arrray . ie Ads[0] 's vote == Votes[0]
-      SetVotes(votes);
+      console.log("votes array",votes);
+      
       SetAds(ad);
-      const sampleVotes = ["2", "5", "1", "6", "3", "4"];
-      SetVotes(sampleVotes);
+      // const sampleVotes = ["2", "5", "1", "6", "3", "4"];
+      SetVotes(votes);
       const data = ad.map((e, idx) => {
+        console.log("parseInt",parseInt(Votes[idx]));
         return {
           url: `https://ipfs.io/ipfs/${e.hash}`,
-          votes: parseInt(sampleVotes[idx]),
+          hash:e.hash,
+          votes: parseInt(Votes[idx]),
         };
-      });
+      })
 
       data.sort((a, b) => {
         return b.votes - a.votes;
