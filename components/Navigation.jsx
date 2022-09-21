@@ -8,7 +8,7 @@ export default function Navigation() {
 
   return (
     <>
-      <div className=" menu flex justify-center border-b-4 border-black mt-6 ">
+      <div className=" menu flex justify-center border-b-4 border-black ">
         {menu.map((tab) => {
           return (
             <div>

@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   Spinner,
   Tag,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import abi from "../src/helpers/Contract.json";
@@ -19,16 +20,16 @@ import React, { useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
 import type { VerificationResponse } from "@worldcoin/id/dist/types";
 import dynamic from "next/dynamic";
-const {ethers} = require("ethers");
+const { ethers } = require("ethers");
 
-const WorldIDWidget =
-  dynamic <
-  WidgetProps >
-  (() => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
-  { ssr: false });
+const WorldIDWidget = dynamic<WidgetProps>(
+  () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
+  { ssr: false }
+);
 
 const Card = ({ image }) => {
-  const [Proof,SetProof] = useState<VerificationResponse |null>();
+  const [Proof, SetProof] = useState<VerificationResponse | null>();
+  const [cost, setCost] = useState(null);
   const { data: signer, isError, isLoading } = useSigner();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const contract = useContract({
@@ -36,6 +37,28 @@ const Card = ({ image }) => {
     contractInterface: abi.abi,
     signerOrProvider: signer,
   });
+
+  // useEffect(() => {
+  //   console.log("verified");
+  //   if (!Proof || !image) return;
+  //   const getCost = async () => {
+  //     const cost = await contract.Cost(image?.hash, Proof?.nullifier_hash);
+  //     console.log("cost", cost);
+  //     setCost(cost);
+  //   };
+  //   getCost();
+  // }, [Proof]);
+
+  const verificationSuccess = async (response: VerificationResponse) => {
+    console.log("response", response);
+
+    SetProof(response);
+    console.log(image);
+    console.log(response.nullifier_hash);
+    const cost = await contract.Cost(image?.hash, response?.nullifier_hash);
+    console.log("cost", cost);
+    setCost(cost);
+  };
 
   console.log(image);
 
@@ -97,9 +120,10 @@ const Card = ({ image }) => {
                 actionId="wid_staging_c281398b476d06d1426bb2242c05a073" // obtain this from developer.worldcoin.org
                 signal={image.hash}
                 enableTelemetry
-                onSuccess={(verificationResponse) =>
-                  SetProof(verificationResponse)
-                }
+                onSuccess={verificationSuccess}
+                // onSuccess={(verificationResponse) =>
+                //   SetProof(verificationResponse)
+                // }
                 onError={(error) => console.error(error)}
               />
 
@@ -111,25 +135,34 @@ const Card = ({ image }) => {
                 w={"100%"}
                 mt={5}
               >
-                
-                <Button w={"30%"} colorScheme={"blue"}
-                
-                onClick={(async()=>{
-
-                  // const cost = await contract.Cost(image.hash,Proof?.nullifier_hash);
-                  // console.log("cost",cost);
-                  console.log("image hash",image.hash);
-                  const a = await contract.weightage(image.hash);
-                  console.log("a",a);
-                  // await contract.Fund(
-                  //   image.hash,
-                  //   image.hash,
-                  //   Proof.merkle_root,
-                  //   Proof.nullifier_hash,
-                  //   ethers.utils.defaultAbiCoder.decode(["uint256[8]"], Proof.proof)[0],
-                  //   { gasLimit: 10000000,value:ethers.BigNumber.from(cost).toString()}
-                  //   )
-                })}
+                {cost && <Text>{cost}</Text>}
+                <Button
+                  w={"30%"}
+                  colorScheme={"blue"}
+                  onClick={async () => {
+                    const cost = await contract.Cost(
+                      image.hash,
+                      Proof?.nullifier_hash
+                    );
+                    console.log("cost", cost);
+                    console.log("image hash", image.hash);
+                    const a = await contract.weightage(image.hash);
+                    console.log("a", a);
+                    await contract.Fund(
+                      image.hash,
+                      image.hash,
+                      Proof.merkle_root,
+                      Proof.nullifier_hash,
+                      ethers.utils.defaultAbiCoder.decode(
+                        ["uint256[8]"],
+                        Proof.proof
+                      )[0],
+                      {
+                        gasLimit: 10000000,
+                        value: ethers.BigNumber.from(cost).toString(),
+                      }
+                    );
+                  }}
                 >
                   Fund
                 </Button>

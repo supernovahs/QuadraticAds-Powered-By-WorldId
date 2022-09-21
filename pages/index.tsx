@@ -50,27 +50,32 @@ const Home: NextPage = () => {
       const ad = await getBillBoard();
       console.log("ad", ad);
 
+      const a = await contract.weightage(
+        "bafybeigzv7igaxgf2rwifw65ln763z22heqkvhljvsitjsg34ki6wua6aa/Merge.png"
+      );
+      console.log("eth", a);
+
       for (let i = 0; i < ad.length; i++) {
-        console.log("ad hash",ad[i]);
-        let val = await contract.weightage(ad[i]);
-        console.log("val in bignumber",val);
+        console.log("ad hash", ad[i].hash);
+        let val = await contract.weightage(ad[i].hash);
+        console.log("val in bignumber", val);
         const decodedval = ethers.BigNumber.from(val).toString();
         votes.push(decodedval);
       }
       /// Votes array is in order of the Ads arrray . ie Ads[0] 's vote == Votes[0]
-      console.log("votes array",votes);
-      
+      console.log("votes array", votes);
+
       SetAds(ad);
       // const sampleVotes = ["2", "5", "1", "6", "3", "4"];
       SetVotes(votes);
       const data = ad.map((e, idx) => {
-        console.log("parseInt",parseInt(Votes[idx]));
+        console.log("parseInt", parseInt(Votes[idx]));
         return {
           url: `https://ipfs.io/ipfs/${e.hash}`,
-          hash:e.hash,
-          votes: parseInt(Votes[idx]),
+          hash: e.hash,
+          votes: parseInt(votes[idx]),
         };
-      })
+      });
 
       data.sort((a, b) => {
         return b.votes - a.votes;
