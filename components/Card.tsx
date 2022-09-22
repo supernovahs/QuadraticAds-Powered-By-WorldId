@@ -29,7 +29,7 @@ const WorldIDWidget = dynamic<WidgetProps>(
 
 const Card = ({ image }) => {
   const [Proof, SetProof] = useState<VerificationResponse | null>();
-  const [cost, setCost] = useState(null);
+  const [Cost, setCost] = useState(null);
   const { data: signer, isError, isLoading } = useSigner();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const contract = useContract({
@@ -38,29 +38,17 @@ const Card = ({ image }) => {
     signerOrProvider: signer,
   });
 
-  // useEffect(() => {
-  //   console.log("verified");
-  //   if (!Proof || !image) return;
-  //   const getCost = async () => {
-  //     const cost = await contract.Cost(image?.hash, Proof?.nullifier_hash);
-  //     console.log("cost", cost);
-  //     setCost(cost);
-  //   };
-  //   getCost();
-  // }, [Proof]);
-
-  const verificationSuccess = async (response: VerificationResponse) => {
-    console.log("response", response);
-
+  const verificationSuccess = async (response:VerificationResponse) => {
     SetProof(response);
-    console.log(image);
+    console.log("Image.hash",image.hash);
     console.log(response.nullifier_hash);
-    const cost = await contract.Cost(image?.hash, response?.nullifier_hash);
-    console.log("cost", cost);
-    setCost(cost);
+    const cost = await contract.Cost(image.hash, response.nullifier_hash);
+    console.log("cost",cost.toString());
+    const a = ethers.BigNumber.from(cost).toString();
+    setCost(a);
   };
 
-  console.log(image);
+
 
   if (!image) {
     return (
@@ -121,9 +109,6 @@ const Card = ({ image }) => {
                 signal={image.hash}
                 enableTelemetry
                 onSuccess={verificationSuccess}
-                // onSuccess={(verificationResponse) =>
-                //   SetProof(verificationResponse)
-                // }
                 onError={(error) => console.error(error)}
               />
 
@@ -135,7 +120,7 @@ const Card = ({ image }) => {
                 w={"100%"}
                 mt={5}
               >
-                {cost && <Text>{cost}</Text>}
+                {Cost ? (<Text>{((Cost/10**18)) } Matic</Text>) : ""}
                 <Button
                   w={"30%"}
                   colorScheme={"blue"}

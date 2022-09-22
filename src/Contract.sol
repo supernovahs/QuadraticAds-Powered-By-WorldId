@@ -41,8 +41,8 @@ contract Contract {
     
     ////////////// EVENTS //////////////////
 
-    event NewAd(string indexed hash);
-    event Funded(string indexed hash,uint timestamp);
+    event NewAd(string  hash);
+    event Funded(string  hash,uint timestamp);
 
 
     /// @param _worldId The WorldID instance that will verify the proofs
@@ -92,6 +92,7 @@ contract Contract {
             abi.encodePacked("wid_staging_c281398b476d06d1426bb2242c05a073").hashToField(),
             proof
         );
+        IdentitytoHashtoCounter[_nullifierHash][_hash]++;
         
         weightage[_hash] ++;
 

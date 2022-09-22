@@ -24,20 +24,17 @@ const Home: NextPage = () => {
   const contract = useContract({
     addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     contractInterface: abi.abi,
-    signerOrProvider: provider,
+    signerOrProvider: provider
   });
-  console.log("Contract", contract);
-
   const getBillBoard = async () => {
     const Hashes = await contract.queryFilter(contract.filters.NewAd());
+    console.log("Hashes",Hashes);
     const check = await contract.Adhash(
       "bafybeihl2az4oww6raqdcgiipoythpkcgu4daut3gxyyancgp6srq2e3di/solana.png"
     );
     console.log("Check", check);
-    // const iface = new ethers.utils.Interface(abi.abi);
-
     return Hashes.map((e) => {
-      console.log(typeof e.args[0].hash, "type");
+      
       return {
         hash: e.args[0],
       };
