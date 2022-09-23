@@ -5,8 +5,8 @@ import { Box, Heading, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
 const menu = [
-  { tabName: "Ads", pageName: "/" },
-  { tabName: "Fund", pageName: "/Fund" },
+  { tabName: "ADS", pageName: "/" },
+  { tabName: "FUND", pageName: "/Fund" },
 ];
 
 export default function Header() {
@@ -20,15 +20,21 @@ export default function Header() {
       alignItems={"center"}
       justifyContent={"space-between"}
       px={10}
+      // borderBottom={"2px solid white"}
     >
       <Box display={"flex"} flexDir={"row"} alignItems={"center"}>
-        <Heading mr={10}>World Ads</Heading>
+        <Heading mr={10}>WORLD ADS</Heading>
         <Box display={"flex"} flexDir={"row"}>
           {menu.map((tab) => {
             return (
               <Box cursor={"pointer"} key={tab.pageName} mx={2}>
                 <Link href={tab.pageName}>
-                  <Text fontSize={"2xl"}>{tab.tabName}</Text>
+                  <Text
+                    fontSize={"2xl"}
+                    _hover={{ borderBottom: "2px solid white" }}
+                  >
+                    {tab.tabName}
+                  </Text>
                 </Link>
               </Box>
             );

@@ -14,6 +14,7 @@ import {
   Tag,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import abi from "../src/helpers/Contract.json";
 import React, { useEffect, useState } from "react";
@@ -38,17 +39,22 @@ const Card = ({ image }) => {
     signerOrProvider: signer,
   });
 
-  const verificationSuccess = async (response:VerificationResponse) => {
+  const toast = useToast();
+
+  const verificationSuccess = async (response: VerificationResponse) => {
     SetProof(response);
-    console.log("Image.hash",image.hash);
+    console.log("Image.hash", image.hash);
     console.log(response.nullifier_hash);
     const cost = await contract.Cost(image.hash, response.nullifier_hash);
-    console.log("cost",cost.toString());
+    console.log("cost", cost.toString());
     const a = ethers.BigNumber.from(cost).toString();
     setCost(a);
   };
 
-
+  const closeModal = () => {
+    setCost(null);
+    onClose();
+  };
 
   if (!image) {
     return (
@@ -65,7 +71,7 @@ const Card = ({ image }) => {
   }
 
   return (
-    <Box w={"100%"} h={"100%"} position={"relative"}>
+    <Box border={"1px solid white"} w={"100%"} h={"100%"} position={"relative"}>
       <Image
         w={"100%"}
         h={"100%"}
@@ -86,7 +92,7 @@ const Card = ({ image }) => {
       >
         Votes: {image.votes}
       </Tag>
-      <Modal size={"2xl"} isOpen={isOpen} onClose={onClose}>
+      <Modal size={"2xl"} isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent pt={10} px={10}>
           {/* <ModalHeader>Modal Title</ModalHeader> */}
@@ -120,7 +126,7 @@ const Card = ({ image }) => {
                 w={"100%"}
                 mt={5}
               >
-                {Cost ? (<Text>{((Cost/10**18)) } Matic</Text>) : ""}
+                {Cost ? <Text>{Cost / 10 ** 18} Matic</Text> : ""}
                 <Button
                   w={"30%"}
                   colorScheme={"blue"}
@@ -133,20 +139,38 @@ const Card = ({ image }) => {
                     console.log("image hash", image.hash);
                     const a = await contract.weightage(image.hash);
                     console.log("a", a);
-                    await contract.Fund(
-                      image.hash,
-                      image.hash,
-                      Proof.merkle_root,
-                      Proof.nullifier_hash,
-                      ethers.utils.defaultAbiCoder.decode(
-                        ["uint256[8]"],
-                        Proof.proof
-                      )[0],
-                      {
-                        gasLimit: 10000000,
-                        value: ethers.BigNumber.from(cost).toString(),
-                      }
-                    );
+
+                    try {
+                      await contract.Fund(
+                        image.hash,
+                        image.hash,
+                        Proof.merkle_root,
+                        Proof.nullifier_hash,
+                        ethers.utils.defaultAbiCoder.decode(
+                          ["uint256[8]"],
+                          Proof.proof
+                        )[0],
+                        {
+                          gasLimit: 10000000,
+                          value: ethers.BigNumber.from(cost).toString(),
+                        }
+                      );
+                      toast({
+                        title: "Success",
+                        description: "Funding Successfull",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    } catch (error) {
+                      toast({
+                        title: "Error",
+                        description: error.message,
+                        status: "error",
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    }
                   }}
                 >
                   Fund
