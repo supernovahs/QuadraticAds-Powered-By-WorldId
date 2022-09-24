@@ -29,7 +29,7 @@ const WorldIDWidget = dynamic<WidgetProps>(
   { ssr: false }
 );
 
-const Card = ({ image:any  }) => {
+const Card = ({hash,url,votes}:{hash:string;url:string;votes:number} ) => {
   const [Proof, SetProof] = useState<VerificationResponse | null>();
   const [Cost, setCost] = useState(null);
   const { data: signer, isError, isLoading } = useSigner();
@@ -44,9 +44,9 @@ const Card = ({ image:any  }) => {
 
   const verificationSuccess = async (response: VerificationResponse) => {
     SetProof(response);
-    console.log("Image.hash", image.hash);
+    console.log("Image.hash", hash);
     console.log(response.nullifier_hash);
-    const cost = await contract.Cost(image.hash, response.nullifier_hash);
+    const cost = await contract.Cost(hash, response.nullifier_hash);
     console.log("cost", cost.toString());
     const a = ethers.BigNumber.from(cost).toString();
     setCost(a);
@@ -57,7 +57,7 @@ const Card = ({ image:any  }) => {
     onClose();
   };
 
-  if (!image) {
+  if (!hash) {
     return (
       <Box
         w={"100%"}
@@ -76,7 +76,7 @@ const Card = ({ image:any  }) => {
       <Image
         w={"100%"}
         h={"100%"}
-        src={image.url}
+        src={url}
         alt={"image"}
         objectFit={"cover"}
         onClick={onOpen}
@@ -91,7 +91,7 @@ const Card = ({ image:any  }) => {
         zIndex={100}
         color={"whiteAlpha.900"}
       >
-        Votes: {image.votes}
+        Votes: {votes}
       </Tag>
       <Modal size={"2xl"} isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
@@ -104,7 +104,7 @@ const Card = ({ image:any  }) => {
               borderRadius={10}
               w={"100%"}
               h={"100%"}
-              src={image.url}
+              src={url}
               alt={"image"}
               objectFit={"cover"}
             />
@@ -113,7 +113,7 @@ const Card = ({ image:any  }) => {
             <Box display={"flex"} flexDirection={"column"} width={"100%"}>
               <WorldIDWidget
                 actionId="wid_staging_c281398b476d06d1426bb2242c05a073" // obtain this from developer.worldcoin.org
-                signal={image.hash}
+                signal={hash}
                 enableTelemetry
                 onSuccess={verificationSuccess}
                 onError={(error) => console.error(error)}
@@ -133,20 +133,20 @@ const Card = ({ image:any  }) => {
                   colorScheme={"blue"}
                   onClick={async () => {
                     const cost = await contract.Cost(
-                      image.hash,
+                      hash,
                       Proof?.nullifier_hash
                     );
                     console.log("cost", cost);
-                    console.log("image hash", image.hash);
-                    const a = await contract.weightage(image.hash);
+                    console.log("image hash", hash);
+                    const a = await contract.weightage(hash);
                     console.log("a", a);
 
                     try {
                       await contract.Fund(
-                        image.hash,
-                        image.hash,
-                        Proof.merkle_root,
-                        Proof.nullifier_hash,
+                        hash,
+                        hash,
+                        merkle_root,
+                        nullifier_hash,
                         ethers.utils.defaultAbiCoder.decode(
                           ["uint256[8]"],
                           Proof.proof
