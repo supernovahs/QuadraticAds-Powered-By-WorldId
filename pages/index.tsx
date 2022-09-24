@@ -24,17 +24,16 @@ const Home: NextPage = () => {
   const contract = useContract({
     addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     contractInterface: abi.abi,
-    signerOrProvider: provider
+    signerOrProvider: provider,
   });
   const getBillBoard = async () => {
     const Hashes = await contract.queryFilter(contract.filters.NewAd());
-    console.log("Hashes",Hashes);
+    console.log("Hashes", Hashes);
     const check = await contract.Adhash(
       "bafybeihl2az4oww6raqdcgiipoythpkcgu4daut3gxyyancgp6srq2e3di/solana.png"
     );
     console.log("Check", check);
     return Hashes.map((e) => {
-      
       return {
         hash: e.args[0],
       };
@@ -42,6 +41,7 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
+    localStorage.setItem("chakra-ui-color-mode", "dark");
     const call = async () => {
       let votes = [];
       const ad = await getBillBoard();
@@ -91,7 +91,6 @@ const Home: NextPage = () => {
       <main>
         <Box h={"90vh"} w={"100vw"}>
           {images ? <Billboard images={images} /> : <Loader />}
-         
         </Box>
       </main>
     </div>
