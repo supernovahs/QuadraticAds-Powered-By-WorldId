@@ -35,7 +35,7 @@ const Card = ({hash,url,votes}:{hash:string;url:string;votes:number} ) => {
   const { data: signer, isError, isLoading } = useSigner();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const contract = useContract({
-    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!,
     contractInterface: abi.abi,
     signerOrProvider: signer,
   });
@@ -145,11 +145,11 @@ const Card = ({hash,url,votes}:{hash:string;url:string;votes:number} ) => {
                       await contract.Fund(
                         hash,
                         hash,
-                        merkle_root,
-                        nullifier_hash,
+                        Proof?.merkle_root,
+                        Proof?.nullifier_hash,
                         ethers.utils.defaultAbiCoder.decode(
                           ["uint256[8]"],
-                          Proof.proof
+                          Proof?.proof
                         )[0],
                         {
                           gasLimit: 10000000,
