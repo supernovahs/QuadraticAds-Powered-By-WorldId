@@ -63,7 +63,6 @@ const Home: NextPage = () => {
       console.log("votes array", votes);
 
       SetAds(ad);
-      // const sampleVotes = ["2", "5", "1", "6", "3", "4"];
       SetVotes(votes);
       const data = ad.map((e, idx) => {
         console.log("parseInt", parseInt(Votes[idx]));
@@ -92,7 +91,7 @@ const Home: NextPage = () => {
       <main>
         <Box h={"90vh"} w={"100vw"}>
           {images ? <Billboard images={images} /> : <Loader />}
-          {/* <Billboard images={images} /> */}
+         
         </Box>
       </main>
     </div>
