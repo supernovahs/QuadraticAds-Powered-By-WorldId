@@ -35,7 +35,7 @@ const Card = ({hash,url,votes}:{hash:string;url:string;votes:number} ) => {
   const { data: signer, isError, isLoading } = useSigner();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const contract = useContract({
-    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!,
+    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS !== undefined ? process.env.NEXT_PUBLIC_CONTRACT_ADDRESS : '',
     contractInterface: abi.abi,
     signerOrProvider: signer,
   });
