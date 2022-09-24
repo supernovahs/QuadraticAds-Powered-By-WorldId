@@ -29,7 +29,7 @@ const WorldIDWidget = dynamic<WidgetProps>(
   { ssr: false }
 );
 
-const Card = ({ image }) => {
+const Card = ({ image:any  }) => {
   const [Proof, SetProof] = useState<VerificationResponse | null>();
   const [Cost, setCost] = useState(null);
   const { data: signer, isError, isLoading } = useSigner();
