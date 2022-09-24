@@ -21,6 +21,7 @@ import React, { useEffect, useState } from "react";
 import { useContract, useSigner } from "wagmi";
 import type { VerificationResponse } from "@worldcoin/id/dist/types";
 import dynamic from "next/dynamic";
+import { WidgetProps } from "@worldcoin/id";
 const { ethers } = require("ethers");
 
 const WorldIDWidget = dynamic<WidgetProps>(
