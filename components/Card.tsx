@@ -29,13 +29,23 @@ const WorldIDWidget = dynamic<WidgetProps>(
   { ssr: false }
 );
 
-const Card = ({hash,url,votes}:{hash:string;url:string;votes:number} ) => {
+const Card = ({
+  hash,
+  url,
+  votes,
+}: {
+  hash: string;
+  url: string;
+  votes: number;
+}) => {
   const [Proof, SetProof] = useState<VerificationResponse | null>();
   const [Cost, setCost] = useState(null);
   const { data: signer, isError, isLoading } = useSigner();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const contract = useContract({
-    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS !== undefined ? process.env.NEXT_PUBLIC_CONTRACT_ADDRESS : '',
+    addressOrName: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+      ? process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+      : "",
     contractInterface: abi.abi,
     signerOrProvider: signer,
   });
@@ -163,7 +173,7 @@ const Card = ({hash,url,votes}:{hash:string;url:string;votes:number} ) => {
                         duration: 5000,
                         isClosable: true,
                       });
-                    } catch (error:any) {
+                    } catch (error: any) {
                       toast({
                         title: "Error",
                         description: "error",
