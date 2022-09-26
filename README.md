@@ -1,7 +1,7 @@
 # WorldAds
 
 It is an anonymous Quadratic funding mechanism for a public billboard using Semaphore proofs. World Id helps prevent sybil resistance, without which this idea was not viable. 
-
+ ## [Try it out](https://worldads.vercel.app/)
 ### Inspiration 
 [Vitalik's Article](https://vitalik.ca/general/2019/12/07/quadratic.html)
  
